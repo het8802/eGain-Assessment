@@ -4,12 +4,12 @@ A simple, user-friendly chatbot interface for tracking packages and handling los
 
 ## Demo
 1. Ideal case scenario
-![Package Tracking Chatbot Demo](images/chatbot-demo-1.png)
+<img src="images/chatbot-demo-1.png" alt="Package Tracking Chatbot Demo - Ideal Case" width="600"/>
 
 2. Handling exceptions in user input
-![Package Tracking Chatbot Demo](images/chatbot-demo-2.png)
+<img src="images/chatbot-demo-2.png" alt="Package Tracking Chatbot Demo - Exception Handling" width="600"/>
 
-*Screenshot of the Package Tracking Chatbot interface showing a sample conversation*
+*Screenshots of the Package Tracking Chatbot interface showing different conversation scenarios*
 
 ## Features
 
