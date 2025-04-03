@@ -2,6 +2,15 @@
 
 A simple, user-friendly chatbot interface for tracking packages and handling lost package inquiries. The chatbot provides a conversational interface to check package status, file claims, and get support for delivery issues.
 
+## Demo
+1. Ideal case scenario
+![Package Tracking Chatbot Demo](images/chatbot-demo-1.png)
+
+2. Handling exceptions in user input
+![Package Tracking Chatbot Demo](images/chatbot-demo-2.png)
+
+*Screenshot of the Package Tracking Chatbot interface showing a sample conversation*
+
 ## Features
 
 - Simple and intuitive chat interface
@@ -20,7 +29,7 @@ A simple, user-friendly chatbot interface for tracking packages and handling los
 
 2. No installation or build process required! Simply:
    - Double-click `index.html` to open in your browser, or
-   - Use a local server (recommended for development):
+   - Use a local server (recommended only for development):
      ```bash
      # Using Python 3
      python3 -m http.server 8000
@@ -28,8 +37,6 @@ A simple, user-friendly chatbot interface for tracking packages and handling los
      # Using Node.js
      npx http-server
      ```
-
-3. For development, any modern code editor (VS Code, Sublime Text, etc.) will work.
 
 ## Implementation Approach
 
