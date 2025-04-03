@@ -10,7 +10,8 @@ class PackageTrackingBot {
         this.state = {
             currentStep: 'greeting',
             trackingId: null,
-            packageStatus: null
+            packageStatus: null,
+            isEnded: false
         };
         
         // Mock database of package statuses
@@ -22,8 +23,15 @@ class PackageTrackingBot {
     }
 
     // Validate tracking ID format (simple example)
-    isValidTrackingId(id) {
-        return /^TRK\d{6}$/.test(id);
+    isValidTrackingId(input) {
+        // Split the input into words and check each word
+        const words = input.split(/\s+/);
+        for (const word of words) {
+            if (/^TRK\d{6}$/.test(word)) {
+                return word; // Return the actual tracking ID if found
+            }
+        }
+        return null; // Return null if no valid tracking ID is found
     }
 
     // Mock API call to get package status
@@ -32,6 +40,10 @@ class PackageTrackingBot {
     }
 
     processUserInput(input) {
+        if (this.state.isEnded) {
+            return null; // Don't process any more inputs if chat has ended
+        }
+
         input = input.trim();
         
         switch (this.state.currentStep) {
@@ -41,7 +53,7 @@ class PackageTrackingBot {
                     return "I'm sorry to hear that. Can you please provide your order number or tracking ID?";
                 } else {
                     this.state.currentStep = 'ask_tracking';
-                    return "I can help with lost packages. Could you please tell me your order number or tracking ID?";
+                    return "I can help with lost packages. Could you please tell me your tracking ID?";
                 }
 
             case 'ask_tracking':
@@ -49,12 +61,13 @@ class PackageTrackingBot {
                     return "To help you, I need the order or tracking number. Could you please provide that?";
                 }
 
-                if (!this.isValidTrackingId(input)) {
+                const trackingId = this.isValidTrackingId(input);
+                if (!trackingId) {
                     return "That doesn't look like a valid ID. Please provide an ID in the format 'TRKxxxxxx'.";
                 }
 
-                this.state.trackingId = input;
-                const packageInfo = this.lookupPackage(input);
+                this.state.trackingId = trackingId;
+                const packageInfo = this.lookupPackage(trackingId);
 
                 if (!packageInfo) {
                     this.state.currentStep = 'ask_tracking';
@@ -66,6 +79,7 @@ class PackageTrackingBot {
 
                 switch (packageInfo.status) {
                     case 'in_transit':
+                        this.state.currentStep = 'end';
                         return `Your package is currently in transit and is expected to arrive by ${packageInfo.date}.`;
                     case 'delivered':
                         this.state.currentStep = 'delivery_confirmation';
@@ -104,6 +118,7 @@ class PackageTrackingBot {
                     this.state.currentStep = 'greeting';
                     return "How can I help you?";
                 } else if (input.toLowerCase().includes('no')) {
+                    this.state.isEnded = true;
                     return "Thank you for using our package tracking service. Have a great day!";
                 }
                 return "Would you like help with anything else? Please answer yes or no.";
@@ -127,6 +142,29 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    // Function to end chat
+    function endChat() {
+        userInput.disabled = true;
+        sendButton.disabled = true;
+        userInput.placeholder = "Chat ended";
+        
+        // Create and show the thank you popup
+        const popup = document.createElement('div');
+        popup.className = 'thank-you-popup';
+        popup.innerHTML = `
+            <div class="popup-content">
+                <h2>Thank You!</h2>
+                <p>Thank you for using our package tracking service.</p>
+                <p>Have a great day!</p>
+                <button onclick="window.location.reload()">I need help with something else</button>
+            </div>
+        `;
+        document.body.appendChild(popup);
+        
+        // Add fade-in effect
+        setTimeout(() => popup.classList.add('show'), 100);
+    }
+
     // Send initial greeting
     addMessage("Hi! How can I help you today?");
 
@@ -136,7 +174,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (message) {
             addMessage(message, true);
             const response = bot.processUserInput(message);
-            addMessage(response);
+            if (response) {
+                addMessage(response);
+                if (bot.state.isEnded) {
+                    endChat();
+                }
+            }
             userInput.value = '';
         }
     }
