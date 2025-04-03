@@ -80,7 +80,7 @@ class PackageTrackingBot {
                 switch (packageInfo.status) {
                     case 'in_transit':
                         this.state.currentStep = 'end';
-                        return `Your package is currently in transit and is expected to arrive by ${packageInfo.date}.`;
+                        return `Your package is currently in transit and is expected to arrive by ${packageInfo.date}. Would you like help with anything else?`;
                     case 'delivered':
                         this.state.currentStep = 'delivery_confirmation';
                         return `It shows your package was delivered on ${packageInfo.date} at ${packageInfo.location}.\n\nDid you receive it?`;
@@ -93,7 +93,7 @@ class PackageTrackingBot {
             case 'delivery_confirmation':
                 if (input.toLowerCase().includes('yes')) {
                     this.state.currentStep = 'end';
-                    return "Great! Let me know if you need anything else.";
+                    return "Great! Do you need help with something else?";
                 } else if (input.toLowerCase().includes('no')) {
                     this.state.currentStep = 'offer_help';
                     return "I'm sorry to hear that. I can help you file a missing package claim. Would you like to:\n1. File a claim\n2. Contact support\n3. Request a refund";
