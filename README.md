@@ -22,12 +22,14 @@ A simple, user-friendly chatbot interface for tracking packages and handling los
 
 ## Setup Instructions
 
-1. Clone this repository or download the files:
+1. Test out the assistant with one click: https://het8802.github.io/eGain-Assessment/
+
+2. Clone this repository or download the files:
    - `index.html`
    - `styles.css`
    - `script.js`
 
-2. No installation or build process required! Simply:
+3. No installation or build process required! Simply:
    - Double-click `index.html` to open in your browser, or
    - Use a local server (recommended only for development):
      ```bash
